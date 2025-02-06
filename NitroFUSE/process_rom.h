@@ -24,19 +24,32 @@
 
 /**
  * @brief
- * Parses a DS ROM.
- * @param rom
- * @p rom is an argument of type @p FILE*
- * @param arg2
- * @p arg2 is another argument
+ * Processes a DS ROM.
+ * @param fileName
+ * @p const @p std::string&
  * @returns retval
- * A return value
+ * A return value of type @p int
  * @throws exception_object
  * Throws an exception
  * @todo
  * Everything
  */
 int processRom(const std::string& fileName);
-bool verifyIsValidDsRom(std::ifstream& inputFile);
+
+/**
+ * @brief
+ * Verifies that the input file is a DS ROM.
+ * @details
+ * It is not a robust check; it only looks for the Nintendo logo checksum, a constant value at a constant offset.
+ * @param inputFile
+ * @p std::ifstream&
+ * @returns retval
+ * A return value of type @p bool
+ * @throws exception_object
+ * Throws an exception
+ * @todo
+ * Everything
+ */
+bool verifyIsDsRom(std::ifstream& inputFile);
 
 #endif

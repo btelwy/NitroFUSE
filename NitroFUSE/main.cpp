@@ -52,13 +52,15 @@
 // Todo: include <winfsp/winfsp.h>
 #endif
 
-int main() {
+int main(int argc, char* argv[]) {
 	// Implement cmdline.cpp to get fileName from CLI instead of hardcoding it
 	const std::string fileName = "../aj.nds";
-	int result = processRom(fileName);
+	[[maybe_unused]] int result = processRom(fileName);
 
+	argc += 1;
+	argv = argv;
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 
