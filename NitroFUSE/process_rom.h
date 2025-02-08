@@ -16,11 +16,8 @@
 
 // #include "file_formats/file_formats.h"
 
-// Check about whether it's okay to duplicate includes in each file for readability
 #include <fstream>
 #include <string>
-
-// State preconditions and postconditions in comments in interfaces
 
 /**
  * @brief
@@ -40,7 +37,8 @@ int processRom(const std::string& fileName);
  * @brief
  * Verifies that the input file is a DS ROM.
  * @details
- * It is not a robust check; it only looks for the Nintendo logo checksum, a constant value at a constant offset.
+ * It is not a robust check; it only looks for the Nintendo logo CRC-16 checksum,
+ * which is a constant value at a constant offset.
  * @param inputFile
  * @p std::ifstream&
  * @returns retval

@@ -16,14 +16,6 @@
  */
 
 /**
- * @def
- * @brief
- * Enable asserts by commenting out the @p #undef statement.
- */
-#define NODEBUG 1
-#undef NODEBUG
-
-/**
  * @def FUSE_USE_VERSION
  * @brief
  * Specifying this is necessary before including @p <fuse.h> to use the current API.
@@ -62,7 +54,6 @@ int main(int argc, char* argv[]) {
 
 	return EXIT_SUCCESS;
 }
-
 
 	// fuse_context struct is a pointer to a fuse struct, then uid, gid, pid, private_data, and mode_t umask
 	// fuse_main: macro for fuse_main_real() - takes argc, argv (without element 0), fuse_operations struct, then private_data

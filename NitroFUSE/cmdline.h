@@ -14,7 +14,6 @@
 #ifndef _CMDLINE_H_
 #define _CMDLINE_H 1
 
-// Note: ROM will be verified by file contents, not by .nds extension
-
+// Function prototypes here
 
 #endif
