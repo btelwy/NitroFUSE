@@ -2,7 +2,7 @@
 SRC_DIR := NitroFUSE
 BUILD_DIR := build
 WARNINGS := -Wall -Wextra -Werror -pedantic
-SANITIZER := -fsanitize=address -fsanitize=leak -fsanitize=undefined -fsanitize-address-use-after-scope
+SANITIZER := -fsanitize=address -fsanitize=leak -fsanitize=undefined
 SECURITY := -fhardened
 # I'd like to use -fhardened, but that requires GCC 14 and I have GCC 13
 
@@ -31,7 +31,21 @@ FLAGS_COVERAGE := $(FLAGS_COMMON) -O2 -g --coverage $(WARNINGS) $(NOASSERTS)
 # ----------------------------------
 all: init build
 
-build: utils.o process_rom.o main.o
+# Pre-build steps
+init:
+MODE ?= sanitizer
+
+ifeq ($(MODE),release)
+CXX = $(FLAGS_RELEASE)
+else ifeq ($(MODE),sanitizer)
+CXX = $(FLAGS_SANITIZER)
+else ifeq ($(MODE),debug)
+CXX = $(FLAGS_DEBUG)
+else ifeq ($(MODE),coverage)
+CXX = $(FLAGS_COVERAGE)
+endif
+
+build: main.o process_rom.o nitrorom.o
 	$(CXX) $(foreach file,$^,$(BUILD_DIR)/$(file)) -o $(BUILD_DIR)/nitrofuse
 	@echo "Build mode used: $(MODE)"
 	@echo ""
@@ -44,8 +58,8 @@ main.o:
 process_rom.o:
 	$(CXX) -c $(SRC_DIR)/process_rom.cpp -o $(BUILD_DIR)/process_rom.o
 
-utils.o:
-	$(CXX) -c $(SRC_DIR)/utils.cpp -o $(BUILD_DIR)/utils.o
+nitrorom.o:
+	$(CXX) -c $(SRC_DIR)/nitrorom.cpp -o $(BUILD_DIR)/nitrorom.o
 
 # ---------------------------
 # Optional unit test build target
@@ -66,17 +80,3 @@ install:
 # Optional clean target
 clean:
 	rm -rf $(BUILD_DIR)/*
-
-# Pre-build steps
-init:
-MODE ?= sanitizer
-
-ifeq ($(MODE),release)
-CXX := $(FLAGS_RELEASE)
-else ifeq ($(MODE),sanitizer)
-CXX := $(FLAGS_SANITIZER)
-else ifeq ($(MODE),debug)
-CXX := $(FLAGS_DEBUG)
-else ifeq ($(MODE),coverage)
-CXX := $(FLAGS_COVERAGE)
-endif

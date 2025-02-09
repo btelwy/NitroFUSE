@@ -1,23 +1,15 @@
+#include "./nitrorom.h"
 #include "./process_rom.h"
-#include "./utils.h"
 
 #include <cstddef>
-#include <cstdint>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
 int processRom(const std::string& fileName) {
-	std::ifstream rom(fileName, std::ios::binary);
-	if (rom.fail()) {
-		std::cout << "Error: could not open file '" << fileName << "'." << std::endl;
-		return EXIT_FAILURE;
-	}
+	NitroROM rom(fileName);
 
-	rom.seekg(rom.end);
-	// double fileSize = rom.tellg();
-	rom.seekg(rom.beg);
-
-	if (!verifyIsDsRom(rom)) {
+	if (!verifyIsDsRom(rom.getFile())) {
 		std::cout << "Error: '" << fileName << "' is not a valid DS ROM." << std::endl;
 		return EXIT_FAILURE;
 	}
@@ -27,14 +19,14 @@ int processRom(const std::string& fileName) {
 	return EXIT_SUCCESS;
 }
 
-bool verifyIsDsRom(std::ifstream& rom) {
+bool verifyIsDsRom(std::fstream& inFile) {
 	// Details of the Nintendo logo CRC-16 checksum used to check the file is a DS ROM
-	const size_t CHECKSUM_OFFSET_BYTES = 0x15C; 				// Offset in bytes from beginning of ROM
-	const uint16_t CHECKSUM_VALUE_LE = 0xCF56; 		 			// Value of checksum in little-endian format
-	const size_t CHECKSUM_SIZE = sizeof(CHECKSUM_VALUE_LE);		// 2 bytes
+	const size_t CHECKSUM_OFFSET = 0x15C;
+	const std::string CHECKSUM_VALUE_LE = "CF56";
+	const size_t CHECKSUM_SIZE = 2;
 
-	std::vector<std::byte> checksumBytesLE = readBytesLE(rom, CHECKSUM_SIZE, CHECKSUM_OFFSET_BYTES);
-	if (bytesToULL(checksumBytesLE) != CHECKSUM_VALUE_LE) {
+	std::vector<std::byte> checksumBytesLE = readBytesLE(inFile, CHECKSUM_SIZE, CHECKSUM_OFFSET, std::ios::beg);
+	if (bytesToString(checksumBytesLE) != CHECKSUM_VALUE_LE) {
 		return false;
 	}
 	return true;

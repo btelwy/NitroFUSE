@@ -14,14 +14,13 @@
 #ifndef _PROCESS_ROM_H_
 #define _PROCESS_ROM_H_ 1
 
-// #include "file_formats/file_formats.h"
-
 #include <fstream>
 #include <string>
 
+
 /**
  * @brief
- * Processes a DS ROM.
+ * Processes and extracts necessary data from a DS ROM.
  * @param fileName
  * @p const @p std::string&
  * @returns retval
@@ -38,16 +37,13 @@ int processRom(const std::string& fileName);
  * Verifies that the input file is a DS ROM.
  * @details
  * It is not a robust check; it only looks for the Nintendo logo CRC-16 checksum,
- * which is a constant value at a constant offset.
- * @param inputFile
- * @p std::ifstream&
- * @returns retval
- * A return value of type @p bool
+ * which is a constant value of 0xCF56 at constant offset from start 0x15C.
+ * @param inFile @p std::fstream&
+ * @returns @p true if @p inputFile is a DS ROM
  * @throws exception_object
  * Throws an exception
- * @todo
- * Everything
  */
-bool verifyIsDsRom(std::ifstream& inputFile);
+bool verifyIsDsRom(std::fstream& inFile);
+
 
 #endif

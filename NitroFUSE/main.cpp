@@ -23,13 +23,12 @@
  * If not specified, @c libfuse sets an older value by default, forcing use of the old API.
  */
 #define FUSE_USE_VERSION 35
-#include <fuse3/fuse.h>
 
 //#include "./cmdline.h"
 #include "./process_rom.h"
 
-#include <fstream>
 #include <string>
+#include <fuse3/fuse.h>
 
 /**
  * @def _WIN32
@@ -49,7 +48,7 @@ int main(int argc, char* argv[]) {
 	const std::string fileName = "../aj.nds";
 	[[maybe_unused]] int result = processRom(fileName);
 
-	argc += 1;
+	argc = argc;
 	argv = argv;
 
 	return EXIT_SUCCESS;

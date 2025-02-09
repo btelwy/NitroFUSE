@@ -14,7 +14,7 @@
 #ifndef _FILE_FORMATS_H_
 #define _FILE_FORMATS_H_ 1
 
-#include "../compression_types/compression_types.h"
+// #include "../compression_types/compression_types.h"
 
 #include <fstream>
 
@@ -34,7 +34,7 @@ enum fileFormats {
  */
 class fileParser {
 	public:
-		// What information needs to be returned from any file?
+		// What information needs to be returned from each file in the ROM?
 		int detectFileFormat(std::ifstream);
 
 	private:
