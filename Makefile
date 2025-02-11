@@ -45,7 +45,7 @@ else ifeq ($(MODE),coverage)
 CXX = $(FLAGS_COVERAGE)
 endif
 
-build: main.o process_rom.o nitrorom.o
+build: main.o process_rom.o nitrorom.o nitronode.o
 	$(CXX) $(foreach file,$^,$(BUILD_DIR)/$(file)) -o $(BUILD_DIR)/nitrofuse
 	@echo "Build mode used: $(MODE)"
 	@echo ""
@@ -60,6 +60,9 @@ process_rom.o:
 
 nitrorom.o:
 	$(CXX) -c $(SRC_DIR)/nitrorom.cpp -o $(BUILD_DIR)/nitrorom.o
+
+nitronode.o:
+	$(CXX) -c $(SRC_DIR)/nitronode.cpp -o $(BUILD_DIR)/nitronode.o
 
 # ---------------------------
 # Optional unit test build target

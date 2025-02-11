@@ -14,7 +14,7 @@
 #ifndef _NITROROM_H_
 #define _NITROROM_H_ 1
 
-//#include "./nitrofs.h"
+#include "./nitronode.h"
 
 #include <fstream>
 #include <string>
@@ -32,8 +32,8 @@ class NitroROM {
 
 	public:
 		const std::string fileName;
-		const size_t bytesInRom;
-		//NitroFS fs;
+		const size_t bytesInROM;
+		NitroNode* root = new NitroNode("root", 0, bytesInROM, true);
 
 		// There used to be a "isLittleEndianSystem" check, but BE architectures are pretty rare
 
@@ -65,19 +65,20 @@ class NitroROM {
 			return romFile.tellp();
 		}
 
-		explicit NitroROM(const std::string fileNameParam) :
-			romFile(fileNameParam, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate),
-			fileName(fileNameParam),
-			bytesInRom(romFile.tellg())
+		NitroROM(const std::string _fileName) :
+			romFile(_fileName, std::ios::in | std::ios::out | std::ios::binary | std::ios::ate),
+			fileName(_fileName),
+			bytesInROM(romFile.tellg())
 		{
 			romFile.seekg(std::ios::beg); // Undo the effect of std::ios::ate
 			romFile.seekp(std::ios::beg);
 
 			//if (fileFailed()) { abort(); }
-		};
+		}
 		~NitroROM() {
 			romFile.close();
-		};
+			delete root;
+		}
 };
 
 // Reads bytes from a file into a byte vector, following little-endian order.
